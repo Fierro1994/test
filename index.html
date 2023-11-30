@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="ru">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
+    integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+  <title>Fetch доступ</title>
+</head>
+
+<body>
+
+  <header>
+
+  </header>
+  <table id="id" class="table table-striped">
+
+    <th>
+
+    </th>
+
+  </table>
+
+  <footer>
+
+  </footer>
+
+  <script>
+
+    window.addEventListener('load', () => {
+      fetchContent();
+    });
+
+
+    var textid = "<td>ID</td>"
+      + "<td>SYMBOL</td>"
+      + "<td>NAME</td>";
+
+
+    function updateContent(textid) {
+      document.getElementById("id").innerHTML = textid;
+      createColorFiveFirst();
+
+    }
+
+    function createColorFiveFirst() {
+
+      document.getElementById("0").style.backgroundColor = "#050791"
+      document.getElementById("0").style.color = "#fff"
+
+      document.getElementById("1").style.backgroundColor = "#050791"
+      document.getElementById("1").style.color = "#fff"
+
+      document.getElementById("2").style.backgroundColor = "#050791"
+      document.getElementById("2").style.color = "#fff"
+
+      document.getElementById("3").style.backgroundColor = "#050791"
+      document.getElementById("3").style.color = "#fff"
+
+      document.getElementById("4").style.backgroundColor = "#050791"
+      document.getElementById("4").style.color = "#fff"
+
+      let all = document.querySelectorAll('.usdt');
+
+      for (let a of all) {
+        a.style.color = "yellow";
+        a.style.backgroundColor = "#32CD32";
+      }
+
+    }
+
+    var status = function (response) {
+      if (response.status !== 200) {
+        return Promise.reject(new Error(response.statusText))
+      }
+      return Promise.resolve(response)
+    }
+    var json = function (response) {
+      return response.json()
+    }
+
+
+    function fetchContent() {
+      var i = 0;
+
+      fetch('https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&order=market_cap_desc&per_page=250&page=1')
+        .then(status)
+        .then(json)
+        .then(function (data) {
+          data.forEach(element => {
+
+            if (element.symbol == "usdt") {
+              textid += "<tr id=\"" + i + "\" class=" + "\"" + "usdt" + "\"" + ">";
+            } else {
+              textid += "<tr id=\"" + i + "\"" + ">";
+            }
+            textid += "<td>" + element.id + "</td>";
+            textid += "<td>" + element.symbol + "</td>";
+            textid += "<td>" + element.name + "</td>"
+            textid += "</tr>";
+            i++;
+          })
+          updateContent(textid);
+        })
+        .catch(function (error) {
+          console.log('error', error)
+        })
+
+    }
+  </script>
+</body>
+
+</html>
